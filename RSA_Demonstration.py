@@ -1,8 +1,18 @@
 ### Demonstrates RSA public-private key encryption
 import random
+import math
 
-def generatePrimes(a, b, n): #generates n prime numbers between a and b.
-    return 283, 293  #write an actual thing
+def generatePrimes(b, n): #generates n largest prime numbers between 1 and b. Sieve of Sundaram.
+    k = (b-1)/2
+    a = [True] * b
+    for i in range (1, math.ceil(math.sqrt(k))):
+        j = i
+        while (i+j+2*i*j <= k):
+            a[i+j+2*i*j] = False       #number is not prime if it equalds i_j_2ij
+            j += 1
+    t = [i for i, x in enumerate(a) if x]   # indices of elements in a if element is True
+    t = [2*x + 1 for x in t]
+    return [t[-(i+1)] for i in range(n)]
 
 def lcm(a, b): #returns least common multiple of a and b.
     return int(a/(gcd(a, b)) * b)
@@ -32,30 +42,32 @@ def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Exten
             pn = (pnminus2-pnminus1*qnminus2) % m
             pnminus2 = pnminus1
             pnminus1 = pn
-            print(pnminus2, pnminus1, pn, qnminus2)
+            #print(pnminus2, pnminus1, pn, qnminus2)
         return pnminus2
     else:
         raise Exception("The modular multiplicative inverse does not exist for " + str(a) + " and " + str(b))
 
 
 
+
+
 if __name__ == "__main__":
     #print(gcd(5381, 8190))
-    p, q = generatePrimes(2, 3, 1)
+    p, q = generatePrimes(1000, 2)
     n = p*q
     phiN = lcm(p-1, q-1)
-    #print("phiN is " + str(phiN))   
-    e = 313   #Write generate primes function
+    #print("phiN is " + str(phiN))
+    e = generatePrimes(phiN, 1)[0]
     d = modularMultiplicativeInverse(e, phiN)
     print("Public Key is: " + str(e) + ", " +str(n))
     print("Private Key is: " + str(d) + ", " + str(n))
     plainText = int(input("Input plaintext: "))
     if plainText>n:
         raise Exception("Plaintext cannot be larger than n. ")
-    cipherText = plainText**e % n
+    cipherText = pow(plainText, e, n)
     print("Ciphertext is: " + str(cipherText))
     key = int(input("Input key: "))
-    message = cipherText**key % n
+    message = pow(cipherText, key, n)
     print(message)
 
 
