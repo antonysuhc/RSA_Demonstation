@@ -1,5 +1,4 @@
 ### Demonstrates RSA public-private key encryption
-import random
 import math
 
 def generatePrimes(b, n): #generates n largest prime numbers between 1 and b. Sieve of Sundaram.
@@ -47,13 +46,21 @@ def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Exten
     else:
         raise Exception("The modular multiplicative inverse does not exist for " + str(a) + " and " + str(b))
 
-
-
-
+def stringToIntList(str):
+    result = []
+    for x in str:
+        result.extend(ord(i) for i in x)
+    return result
+def intToString(intList):
+    result = ""
+    for i in intList:
+        result += chr(i)
+    return result
 
 if __name__ == "__main__":
     #print(gcd(5381, 8190))
-    p, q = generatePrimes(1000, 2)
+    keySize = int(input("Input key size: "))
+    p, q = generatePrimes(keySize, 2)
     n = p*q
     phiN = lcm(p-1, q-1)
     #print("phiN is " + str(phiN))
@@ -61,13 +68,12 @@ if __name__ == "__main__":
     d = modularMultiplicativeInverse(e, phiN)
     print("Public Key is: " + str(e) + ", " +str(n))
     print("Private Key is: " + str(d) + ", " + str(n))
-    plainText = int(input("Input plaintext: "))
-    if plainText>n:
-        raise Exception("Plaintext cannot be larger than n. ")
-    cipherText = pow(plainText, e, n)
+    plainText = stringToIntList(input("Input plaintext: "))
+    cipherText = intToString([pow(i, e, n) for i in plainText])
     print("Ciphertext is: " + str(cipherText))
     key = int(input("Input key: "))
-    message = pow(cipherText, key, n)
+    message = intToString([pow(i, key, n) for i in stringToIntList(cipherText)])
+
     print(message)
 
 
