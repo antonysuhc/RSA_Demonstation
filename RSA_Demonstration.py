@@ -61,12 +61,7 @@ def intToString(intList):
         result += chr(i)
     return result
 
-
-
-
-if __name__ == "__main__":
-    #print(gcd(5381, 8190))
-    keySize = int(input("Input key size (<= 1000): "))
+def createKeys(keySize):
     if keySize > 1000:
         raise Exception("Key size must be less than 1000.")
     p, q = generatePrimes(keySize, 2)
@@ -74,7 +69,16 @@ if __name__ == "__main__":
     phiN = lcm(p-1, q-1)
     #print("phiN is " + str(phiN))
     e = generatePrimes(phiN, keySize)[random.randrange(keySize)]
-    d = modularMultiplicativeInverse(e, phiN)
+    try:
+        d = modularMultiplicativeInverse(e, phiN)
+    except Exception:
+        e, d, n = createKeys(keySize)
+    return e, d, n
+
+
+if __name__ == "__main__":
+    keySize = int(input("Input key size (<= 1000): "))
+    e, d, n = createKeys(keySize)
     print("Public Key is: " + str(e) + ", " +str(n))
     print("Private Key is: " + str(d) + ", " + str(n))
     plainText = stringToIntList(input("Input plaintext: "))
