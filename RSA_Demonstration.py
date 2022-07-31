@@ -49,12 +49,12 @@ def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Exten
 def stringToIntList(str):
     result = []
     for x in str:
-        result.extend(ord(i) for i in x)
+        result.extend(ord(i)+1 for i in x)
     return result
 def intToString(intList):
     result = ""
     for i in intList:
-        result += chr(i)
+        result += chr(i-1)
     return result
 
 if __name__ == "__main__":
