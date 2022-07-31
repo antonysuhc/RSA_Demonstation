@@ -7,7 +7,7 @@ def generatePrimes(b, n): #generates n largest prime numbers between 1 and b. Si
     for i in range (1, math.ceil(math.sqrt(k))):
         j = i
         while (i+j+2*i*j <= k):
-            a[i+j+2*i*j] = False       #number is not prime if it equalds i_j_2ij
+            a[i+j+2*i*j] = False       #number is not prime if it equals i*j*2ij
             j += 1
     t = [i for i, x in enumerate(a) if x]   # indices of elements in a if element is True
     t = [2*x + 1 for x in t]
@@ -16,7 +16,7 @@ def generatePrimes(b, n): #generates n largest prime numbers between 1 and b. Si
 def lcm(a, b): #returns least common multiple of a and b.
     return int(a/(gcd(a, b)) * b)
 
-def gcd(a, b): #returns the greateast common divisor of a and b. Euclidean algorithm
+def gcd(a, b): #returns the greateast common divisor of a and b. Euclidean algorithm.
     remainder = a
     while(remainder > 0):
         remainder = b % a
@@ -27,7 +27,7 @@ def gcd(a, b): #returns the greateast common divisor of a and b. Euclidean algor
 def isCoPrime(a, b): #returns TRUE if a is a coprime of b. 
     return (gcd(a, b) == 1)
 
-def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Extended Euclidean Algorithm
+def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Extended Euclidean Algorithm.
     if(isCoPrime(a, b)): #Inverse exists iif a is not coprime to b.
         m = b
         pnminus2 = 0
@@ -49,12 +49,12 @@ def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Exten
 def stringToIntList(str):
     result = []
     for x in str:
-        result.extend(ord(i)+1 for i in x)
+        result.extend(ord(i) for i in x)
     return result
 def intToString(intList):
     result = ""
     for i in intList:
-        result += chr(i-1)
+        result += chr(i)
     return result
 
 if __name__ == "__main__":
@@ -64,16 +64,24 @@ if __name__ == "__main__":
     n = p*q
     phiN = lcm(p-1, q-1)
     #print("phiN is " + str(phiN))
-    e = generatePrimes(phiN, 1)[0]
+    e = generatePrimes(phiN, 1000)[999]
     d = modularMultiplicativeInverse(e, phiN)
     print("Public Key is: " + str(e) + ", " +str(n))
     print("Private Key is: " + str(d) + ", " + str(n))
     plainText = stringToIntList(input("Input plaintext: "))
-    cipherText = intToString([pow(i, e, n) for i in plainText])
-    print("Ciphertext is: " + str(cipherText))
+    cipherText = [pow(i, e, n) for i in plainText]
+    try: 
+        print("Ciphertext is: " + str(intToString(cipherText)))
+    except ValueError:
+        print("Ciphertext could not be converted to Unicode due to large key size.")
+        print(cipherText)
     key = int(input("Input key: "))
-    message = intToString([pow(i, key, n) for i in stringToIntList(cipherText)])
-
+    try: 
+        message = intToString([pow(i, key, n) for i in cipherText])
+    except ValueError:
+        print("Message could not be decoded into text.")
+        #print(plainText)
+        message = [pow(i, key, n) for i in cipherText]
     print(message)
 
 
