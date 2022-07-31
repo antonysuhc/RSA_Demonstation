@@ -59,7 +59,9 @@ def intToString(intList):
 
 if __name__ == "__main__":
     #print(gcd(5381, 8190))
-    keySize = int(input("Input key size: "))
+    keySize = int(input("Input key size (<= 1000): "))
+    if keySize > 1000:
+        raise Exception("Key size must be less than 1000.")
     p, q = generatePrimes(keySize, 2)
     n = p*q
     phiN = lcm(p-1, q-1)
