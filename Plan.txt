@@ -1,0 +1,13 @@
+1. Generate two prime numbers p, q. 
+2. n = p * q
+3. L(n) = lcm(p-1, q-1)
+4. Generate prime e 1<e<L(n)
+5. Check e is not divisor of L(n)
+6. Find d, given e*d = 1 mod(L(n))
+7. Check plaintext**e mod(n) = ciphertext and ciphertext**d mod(n) = plaintext
+
+
+1a, 4.a. Generate prime numbers in (a, b)
+3a. Find lcm of (a, b)
+5a. Find if a is divisor of b
+6a. Find d, given e*d = 1 mod(L(n))
