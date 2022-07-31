@@ -1,5 +1,8 @@
 ### Demonstrates RSA public-private key encryption
+### Decoding somehow breaks when key size >> 1000. I'm guessing error may be in the modularMultiplicativeInverse function. 
+
 import math
+import random
 
 def generatePrimes(b, n): #generates n largest prime numbers between 1 and b. Sieve of Sundaram.
     k = (b-1)/2
@@ -51,11 +54,15 @@ def stringToIntList(str):
     for x in str:
         result.extend(ord(i) for i in x)
     return result
+
 def intToString(intList):
     result = ""
     for i in intList:
         result += chr(i)
     return result
+
+
+
 
 if __name__ == "__main__":
     #print(gcd(5381, 8190))
@@ -66,7 +73,7 @@ if __name__ == "__main__":
     n = p*q
     phiN = lcm(p-1, q-1)
     #print("phiN is " + str(phiN))
-    e = generatePrimes(phiN, 1000)[999]
+    e = generatePrimes(phiN, keySize)[random.randrange(keySize)]
     d = modularMultiplicativeInverse(e, phiN)
     print("Public Key is: " + str(e) + ", " +str(n))
     print("Private Key is: " + str(d) + ", " + str(n))
@@ -75,7 +82,7 @@ if __name__ == "__main__":
     try: 
         print("Ciphertext is: " + str(intToString(cipherText)))
     except ValueError:
-        print("Ciphertext could not be converted to Unicode due to large key size.")
+        print("Ciphertext could not be converted to Unicode due to large key size. Try key size <= 100.")
         print(cipherText)
     key = int(input("Input key: "))
     try: 
