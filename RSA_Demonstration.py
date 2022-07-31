@@ -35,7 +35,7 @@ def modularMultiplicativeInverse(a, b): #returns d, given d*a = 1 mod (b). Exten
             print(pnminus2, pnminus1, pn, qnminus2)
         return pnminus2
     else:
-        raise Exception("Multiplicative Modulo Inverse does not exist for " + str(a) + " and " + str(b))
+        raise Exception("The modular multiplicative inverse does not exist for " + str(a) + " and " + str(b))
 
 
 
